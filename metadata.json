@@ -1,0 +1,6 @@
+{
+  "name": "LIFEOS",
+  "description": "Your life. One intelligent system. Modern AI productivity app with goals, tasks, daily planning, and AI assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
