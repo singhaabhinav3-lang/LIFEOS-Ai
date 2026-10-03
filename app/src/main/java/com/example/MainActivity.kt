@@ -33,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -106,6 +107,7 @@ fun LifeOsApp(viewModel: LifeOsViewModel) {
 
     // Strict Auth Gate: Do not allow user to access ANY functionality until signed in
     if (profile == null) {
+        val context = LocalContext.current
         AuthScreen(
             isAuthLoading = isAuthLoading,
             authError = authError,
@@ -114,6 +116,9 @@ fun LifeOsApp(viewModel: LifeOsViewModel) {
             },
             onSignUp = { email, pass, name ->
                 viewModel.signUpWithFirebase(email, pass, name)
+            },
+            onSignInWithGoogle = {
+                viewModel.signInWithGoogle(context)
             },
             onClearError = { viewModel.clearAuthError() }
         )

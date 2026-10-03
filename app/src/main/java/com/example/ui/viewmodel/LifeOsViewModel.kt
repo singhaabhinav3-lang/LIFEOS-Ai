@@ -169,6 +169,24 @@ class LifeOsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun signInWithGoogle(context: android.content.Context) {
+        viewModelScope.launch {
+            _isAuthLoading.value = true
+            _authError.value = null
+            val result = firebaseAuthManager.signInWithGoogle(context)
+            result.onSuccess { user ->
+                val name = user.displayName ?: user.email?.substringBefore("@")?.capitalize() ?: "Commander"
+                repository.activateFirebaseUser(user.uid, user.email ?: "", name)
+                _snackbarMessage.value = "Google Authentication Verified. Welcome, $name!"
+                _currentScreen.value = Screen.Home
+            }.onFailure { ex ->
+                val errorMsg = ex.localizedMessage ?: "Google Authentication failed"
+                _authError.value = errorMsg
+            }
+            _isAuthLoading.value = false
+        }
+    }
+
     fun logout() {
         viewModelScope.launch {
             firebaseAuthManager.signOut()
